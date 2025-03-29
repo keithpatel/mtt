@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Counter | MultiTools</title>
+    <link href="../styles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="header"></div>
+    
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="mb-4">Word & Character Counter</h1>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea id="textInput" class="form-control" 
+                                      rows="8" placeholder="Start typing or paste your text here..."></textarea>
+                        </div>
+                        <div class="row mt-4 text-center">
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-box bg-light p-3 rounded">
+                                    <h5>Words</h5>
+                                    <span id="wordCount" class="display-4">0</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-box bg-light p-3 rounded">
+                                    <h5>Characters</h5>
+                                    <span id="charCount" class="display-4">0</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-box bg-light p-3 rounded">
+                                    <h5>Sentences</h5>
+                                    <span id="sentenceCount" class="display-4">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="../main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load header and footer
+            const components = [
+                { file: '../header.html', elementId: 'header' },
+                { file: '../footer.html', elementId: 'footer' }
+            ];
+
+            components.forEach(({ file, elementId }) => {
+                fetch(file)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById(elementId).innerHTML = html;
+                    });
+            });
+
+            // Word Counter Logic
+            const textarea = document.getElementById('textInput');
+            const wordCount = document.getElementById('wordCount');
+            const charCount = document.getElementById('charCount');
+            const sentenceCount = document.getElementById('sentenceCount');
+
+            textarea.addEventListener('input', updateCounts);
+
+            function updateCounts() {
+                const text = textarea.value.trim();
+                
+                // Character count
+                charCount.textContent = text.length;
+                
+                // Word count
+                const words = text ? text.split(/\s+/).filter(word => word.length > 0).length : 0;
+                wordCount.textContent = words;
+                
+                // Sentence count
+                const sentences = text.split(/[.!?]+/).filter(sentence => sentence.length > 0).length;
+                sentenceCount.textContent = sentences;
+            }
+        });
+    </script>
+</body>
+</html>
